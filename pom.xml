@@ -127,6 +127,27 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/README.md</exclude>
+                        <exclude>**/MANIFEST.MF</exclude>
+                        <exclude>**/DEPENDENCIES.txt</exclude>
+                        <exclude>**/module-info.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
