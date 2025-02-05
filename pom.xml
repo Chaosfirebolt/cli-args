@@ -143,7 +143,6 @@
                     <excludes>
                         <exclude>**/README.md</exclude>
                         <exclude>**/MANIFEST.MF</exclude>
-                        <exclude>**/DEPENDENCIES.txt</exclude>
                         <exclude>**/module-info.java</exclude>
                     </excludes>
                 </configuration>
