@@ -16,13 +16,16 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
-interface BeanAccessor {
+import java.lang.reflect.Field;
 
-  /**
-   * Set the value in the bean
-   *
-   * @param bean  bean to set value in
-   * @param value value to set in the bean
-   */
-  void set(Object bean, Object value);
+class FieldMutator extends BaseBeanMutator<Field> {
+
+  FieldMutator(Field field) {
+    super(field);
+  }
+
+  @Override
+  void doSet(Object bean, Object value) throws IllegalAccessException {
+    member.set(bean, value);
+  }
 }

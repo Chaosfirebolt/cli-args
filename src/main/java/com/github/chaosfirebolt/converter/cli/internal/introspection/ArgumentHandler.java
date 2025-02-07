@@ -32,10 +32,10 @@ import java.util.function.Function;
 public final class ArgumentHandler {
 
   private final Argument argument;
-  private final BeanAccessor accessor;
+  private final BeanMutator accessor;
   private final Function<List<String>, ?> parser;
 
-  ArgumentHandler(Argument argument, BeanAccessor accessor, Function<List<String>, ?> parser) {
+  ArgumentHandler(Argument argument, BeanMutator accessor, Function<List<String>, ?> parser) {
     this.argument = argument;
     this.accessor = accessor;
     this.parser = parser;

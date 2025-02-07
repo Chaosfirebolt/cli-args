@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 public class ArgumentHandlerTests {
 
   private Argument argument;
-  private BeanAccessor beanAccessor;
+  private BeanMutator beanMutator;
 
   private final Options options = mock(Options.class);
   private final ArgumentsContainer container = mock();
@@ -46,17 +46,17 @@ public class ArgumentHandlerTests {
   @BeforeEach
   public void setUp() {
     this.argument = mock();
-    this.beanAccessor = mock();
+    this.beanMutator = mock();
     Function<List<String>, Object> parser = mock();
 
     when(argument.name()).thenReturn("--name");
     when(argument.aliases()).thenReturn(new String[]{"-n"});
 
-    doNothing().when(beanAccessor).set(any(), any());
+    doNothing().when(beanMutator).set(any(), any());
 
     when(parser.apply(any())).thenReturn(parseResult);
 
-    this.argumentHandler = new ArgumentHandler(argument, beanAccessor, parser);
+    this.argumentHandler = new ArgumentHandler(argument, beanMutator, parser);
   }
 
   @Test
@@ -65,7 +65,7 @@ public class ArgumentHandlerTests {
     when(options.get("--name")).thenReturn(Optional.of(Option.builder().setKey("--name").addValue("").build()));
 
     argumentHandler.handle(options, container);
-    verify(beanAccessor, times(1)).set(container, parseResult);
+    verify(beanMutator, times(1)).set(container, parseResult);
   }
 
   @Test
@@ -74,7 +74,7 @@ public class ArgumentHandlerTests {
     when(options.get("-n")).thenReturn(Optional.of(Option.builder().setKey("-n").addValue("").build()));
 
     argumentHandler.handle(options, container);
-    verify(beanAccessor, times(1)).set(container, parseResult);
+    verify(beanMutator, times(1)).set(container, parseResult);
   }
 
   @Test
@@ -82,7 +82,7 @@ public class ArgumentHandlerTests {
     when(argument.mandatory()).thenReturn(false);
 
     argumentHandler.handle(options, container);
-    verify(beanAccessor, never()).set(any(), any());
+    verify(beanMutator, never()).set(any(), any());
   }
 
   @Test
