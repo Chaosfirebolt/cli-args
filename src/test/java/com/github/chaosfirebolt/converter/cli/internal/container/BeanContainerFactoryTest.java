@@ -19,35 +19,31 @@ package com.github.chaosfirebolt.converter.cli.internal.container;
 import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
 import com.github.chaosfirebolt.converter.cli.internal.introspection.ArgumentHandler;
 import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-/**
- * Factory creating java bean type containers - no args constructor, setters.
- */
-public class BeanContainerFactory implements ContainerFactory {
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.*;
 
-  private final Supplier<ArgumentsContainer> instanceSupplier;
-  private final List<ArgumentHandler> handlers;
+public class BeanContainerFactoryTest {
 
-  /**
-   * Create an instance with provided arguments.
-   *
-   * @param instanceSupplier supplier of an instance to work with
-   * @param handlers         handlers
-   */
-  public BeanContainerFactory(Supplier<ArgumentsContainer> instanceSupplier, List<ArgumentHandler> handlers) {
-    this.instanceSupplier = instanceSupplier;
-    this.handlers = handlers;
-  }
+  private final Supplier<ArgumentsContainer> instanceSupplier = mock();
+  private final List<ArgumentHandler> handlers = List.of(mock(ArgumentHandler.class), mock(ArgumentHandler.class), mock(ArgumentHandler.class));
 
-  @Override
-  public ArgumentsContainer createContainer(Options options) {
-    ArgumentsContainer container = instanceSupplier.get();
-    for (ArgumentHandler argument : handlers) {
-      argument.handle(options, container);
+  @Test
+  public void testAlgorithm() {
+    ArgumentsContainer container = mock();
+    when(instanceSupplier.get()).thenReturn(container);
+    Options options = mock(Options.class);
+
+    BeanContainerFactory factory = new BeanContainerFactory(instanceSupplier, handlers);
+    ArgumentsContainer result = factory.createContainer(options);
+
+    assertSame(container, result, "Unexpected container returned");
+    for (ArgumentHandler handler : handlers) {
+      verify(handler, times(1)).handle(options, container);
     }
-    return container;
   }
 }

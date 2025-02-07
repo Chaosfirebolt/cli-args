@@ -14,21 +14,17 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.container;
-
-import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
-import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
+package com.github.chaosfirebolt.converter.cli.api.exception;
 
 /**
- * Factory responsible to create an {@link ArgumentsContainer} instance from parsed options.
+ * Signals that an argument marked as mandatory is missing.
  */
-public interface ContainerFactory {
+public class MissingMandatoryArgumentException extends UnrecoverableException {
 
   /**
-   * Creates a container instance from provided {@link Options}.
-   *
-   * @param options options to use
-   * @return a container instance
+   * @see Exception#Exception(String) parent constructor
    */
-  ArgumentsContainer createContainer(Options options);
+  public MissingMandatoryArgumentException(String message) {
+    super(message);
+  }
 }

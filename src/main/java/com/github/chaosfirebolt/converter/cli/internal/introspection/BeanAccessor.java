@@ -14,21 +14,15 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.container;
+package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
-import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
-import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
-
-/**
- * Factory responsible to create an {@link ArgumentsContainer} instance from parsed options.
- */
-public interface ContainerFactory {
+interface BeanAccessor {
 
   /**
-   * Creates a container instance from provided {@link Options}.
+   * Set the value in the bean
    *
-   * @param options options to use
-   * @return a container instance
+   * @param bean  bean to set value in
+   * @param value value to set in the bean
    */
-  ArgumentsContainer createContainer(Options options);
+  void set(Object bean, Object value);
 }
