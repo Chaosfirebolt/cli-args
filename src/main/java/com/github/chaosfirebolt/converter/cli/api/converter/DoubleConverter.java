@@ -14,20 +14,16 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.introspection;
+package com.github.chaosfirebolt.converter.cli.api.converter;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+final class DoubleConverter extends BaseValueConverter<Double> {
 
-import java.util.List;
-import java.util.function.Function;
-
-interface ArgumentHandlerFactory {
-
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
+  DoubleConverter() {
+    super(Double.class);
   }
 
-  ArgumentHandler create(Function<List<String>, ?> parser);
+  @Override
+  protected Double convert(String value) {
+    return Double.valueOf(value);
+  }
 }

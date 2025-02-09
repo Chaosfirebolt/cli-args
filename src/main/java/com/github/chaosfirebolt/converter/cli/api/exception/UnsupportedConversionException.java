@@ -14,20 +14,17 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.introspection;
+package com.github.chaosfirebolt.converter.cli.api.exception;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+/**
+ * Signals that conversion to a specific type is not supported.
+ */
+public class UnsupportedConversionException extends UnrecoverableException {
 
-import java.util.List;
-import java.util.function.Function;
-
-interface ArgumentHandlerFactory {
-
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
+  /**
+   * @see Exception#Exception(String) parent constructor
+   */
+  public UnsupportedConversionException(String message) {
+    super(message);
   }
-
-  ArgumentHandler create(Function<List<String>, ?> parser);
 }

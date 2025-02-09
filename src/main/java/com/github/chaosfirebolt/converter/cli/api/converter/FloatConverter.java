@@ -14,20 +14,16 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.introspection;
+package com.github.chaosfirebolt.converter.cli.api.converter;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+final class FloatConverter extends BaseValueConverter<Float> {
 
-import java.util.List;
-import java.util.function.Function;
-
-interface ArgumentHandlerFactory {
-
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
+  FloatConverter() {
+    super(Float.class);
   }
 
-  ArgumentHandler create(Function<List<String>, ?> parser);
+  @Override
+  protected Float convert(String value) {
+    return Float.valueOf(value);
+  }
 }

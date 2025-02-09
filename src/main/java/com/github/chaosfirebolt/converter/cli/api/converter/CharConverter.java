@@ -14,20 +14,19 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.introspection;
+package com.github.chaosfirebolt.converter.cli.api.converter;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+final class CharConverter extends BaseValueConverter<Character> {
 
-import java.util.List;
-import java.util.function.Function;
-
-interface ArgumentHandlerFactory {
-
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
+  CharConverter() {
+    super(Character.class);
   }
 
-  ArgumentHandler create(Function<List<String>, ?> parser);
+  @Override
+  protected Character convert(String value) {
+    if (value.length() == 1) {
+      return value.charAt(0);
+    }
+    throw new IllegalArgumentException("Invalid character '" + value + "'");
+  }
 }

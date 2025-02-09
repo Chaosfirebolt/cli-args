@@ -14,20 +14,16 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.introspection;
+package com.github.chaosfirebolt.converter.cli.api.converter;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+final class ShortConverter extends BaseValueConverter<Short> {
 
-import java.util.List;
-import java.util.function.Function;
-
-interface ArgumentHandlerFactory {
-
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
+  ShortConverter() {
+    super(Short.class);
   }
 
-  ArgumentHandler create(Function<List<String>, ?> parser);
+  @Override
+  protected Short convert(String value) {
+    return Short.valueOf(value);
+  }
 }

@@ -14,20 +14,16 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.introspection;
+package com.github.chaosfirebolt.converter.cli.api.converter;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+final class LongConverter extends BaseValueConverter<Long> {
 
-import java.util.List;
-import java.util.function.Function;
-
-interface ArgumentHandlerFactory {
-
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
+  LongConverter() {
+    super(Long.class);
   }
 
-  ArgumentHandler create(Function<List<String>, ?> parser);
+  @Override
+  protected Long convert(String value) {
+    return Long.valueOf(value);
+  }
 }
