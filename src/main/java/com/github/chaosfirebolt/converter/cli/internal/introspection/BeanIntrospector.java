@@ -16,18 +16,15 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
 import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
-import com.github.chaosfirebolt.converter.cli.api.exception.DuplicateArgumentNameException;
 import com.github.chaosfirebolt.converter.cli.internal.container.BeanContainerFactory;
 import com.github.chaosfirebolt.converter.cli.internal.container.ContainerFactory;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class BeanIntrospector implements Introspector {
 
@@ -47,19 +44,12 @@ public class BeanIntrospector implements Introspector {
 
   @Override
   public ContainerFactory introspect(Class<?> clazz) {
-    List<ArgumentHandler> handlers = new ArrayList<>();
-    for (Field field : clazz.getDeclaredFields()) {
-      Argument declaredArgument = field.getAnnotation(Argument.class);
-      if (declaredArgument == null) {
-        continue;
-      }
-      uniqueNamesValidator.validate(declaredArgument);
-
-      ArgumentHandler handler = new ArgumentHandler(declaredArgument, new FieldMutator(field), parser);
-      handlers.add(handler);
-    }
+    List<ArgumentHandler> handlers = Stream.of(clazz.getDeclaredFields())
+            .map(FieldArgumentHandlerFactory::new)
+            .filter(ArgumentHandlerFactory::isAnnotated)
+            .peek(factory -> uniqueNamesValidator.validate(factory.argument()))
+            .map(factory -> factory.create(parser))
+            .toList();
     return new BeanContainerFactory(instanceSupplier, handlers);
   }
-
-  //TODO use intermediate record and stream
 }

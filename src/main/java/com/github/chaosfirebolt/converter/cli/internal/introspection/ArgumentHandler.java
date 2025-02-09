@@ -32,12 +32,12 @@ import java.util.function.Function;
 public final class ArgumentHandler {
 
   private final Argument argument;
-  private final BeanMutator accessor;
+  private final BeanMutator mutator;
   private final Function<List<String>, ?> parser;
 
-  ArgumentHandler(Argument argument, BeanMutator accessor, Function<List<String>, ?> parser) {
+  ArgumentHandler(Argument argument, BeanMutator mutator, Function<List<String>, ?> parser) {
     this.argument = argument;
-    this.accessor = accessor;
+    this.mutator = mutator;
     this.parser = parser;
   }
 
@@ -52,7 +52,7 @@ public final class ArgumentHandler {
     Optional<Option> extractedOption = extract(options);
     extractedOption
             .map(option -> option.parse(parser))
-            .ifPresent(value -> accessor.set(container, value));
+            .ifPresent(value -> mutator.set(container, value));
   }
 
   private Optional<Option> extract(Options options) {
