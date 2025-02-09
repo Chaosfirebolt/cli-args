@@ -20,13 +20,14 @@ import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
 import com.github.chaosfirebolt.converter.cli.internal.container.BeanContainerFactory;
 import com.github.chaosfirebolt.converter.cli.internal.container.ContainerFactory;
 
+import java.lang.reflect.AccessibleObject;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class BeanIntrospector implements Introspector {
+abstract class BeanIntrospector<T extends AccessibleObject> implements Introspector {
 
   private final Supplier<ArgumentsContainer> instanceSupplier;
   private final UniqueNamesValidator uniqueNamesValidator;
@@ -38,18 +39,22 @@ public class BeanIntrospector implements Introspector {
     this.parser = parser;
   }
 
-  public BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, Set<String> argumentNames, Function<List<String>, ?> parser) {
+  BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, Set<String> argumentNames, Function<List<String>, ?> parser) {
     this(instanceSupplier, new UniqueNamesValidator(argumentNames), parser);
   }
 
   @Override
-  public ContainerFactory introspect(Class<?> clazz) {
-    List<ArgumentHandler> handlers = Stream.of(clazz.getDeclaredFields())
-            .map(FieldArgumentHandlerFactory::new)
+  public final ContainerFactory introspect(Class<?> clazz) {
+    List<ArgumentHandler> handlers = getAnnotatedElements(clazz)
+            .map(this::createArgumentHandlerFactory)
             .filter(ArgumentHandlerFactory::isAnnotated)
             .peek(factory -> uniqueNamesValidator.validate(factory.argument()))
             .map(factory -> factory.create(parser))
             .toList();
     return new BeanContainerFactory(instanceSupplier, handlers);
   }
+
+  abstract Stream<T> getAnnotatedElements(Class<?> clazz);
+
+  abstract ArgumentHandlerFactory createArgumentHandlerFactory(T member);
 }

@@ -18,7 +18,18 @@ package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
 import com.github.chaosfirebolt.converter.cli.internal.container.ContainerFactory;
 
+/**
+ * Responsible for introspection.
+ */
 public interface Introspector {
 
+  /**
+   * Introspect a class and return a factory for containers.
+   * Throws an exception in case of invalid setup.
+   *
+   * @param clazz class to be introspected
+   * @return factory capable of creating a container
+   * @throws com.github.chaosfirebolt.converter.cli.api.exception.UnrecoverableException in case of invalid setup
+   */
   ContainerFactory introspect(Class<?> clazz);
 }
