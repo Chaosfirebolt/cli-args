@@ -27,12 +27,18 @@ public final class DelegatingValueConverter implements ValueConverter<Object> {
   private static final UnsupportedOperationConverter UNSUPPORTED_OPERATION_CONVERTER = new UnsupportedOperationConverter();
 
   private final Map<Class<?>, ValueConverter<?>> converters;
+  private final ValueConverter<?> defaultConverter;
 
   /**
    * Creates a new instance with the default supported converters.
    */
   public DelegatingValueConverter() {
+    this(UNSUPPORTED_OPERATION_CONVERTER);
+  }
+
+  DelegatingValueConverter(ValueConverter<?> defaultConverter) {
     this.converters = initDefaultConverters();
+    this.defaultConverter = defaultConverter;
   }
 
   private static Map<Class<?>, ValueConverter<?>> initDefaultConverters() {
@@ -51,7 +57,7 @@ public final class DelegatingValueConverter implements ValueConverter<Object> {
 
   @Override
   public Object convert(Class<?> targetClass, String value) {
-    ValueConverter<?> delegate = converters.getOrDefault(targetClass, UNSUPPORTED_OPERATION_CONVERTER);
+    ValueConverter<?> delegate = converters.getOrDefault(targetClass, defaultConverter);
     return delegate.convert(targetClass, value);
   }
 

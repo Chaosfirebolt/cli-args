@@ -23,7 +23,7 @@ final class BooleanConverter extends BaseValueConverter<Boolean> {
   }
 
   @Override
-  protected Boolean convert(String value) {
+  protected Boolean doConvert(String value) {
     return Boolean.valueOf(value);
   }
 }

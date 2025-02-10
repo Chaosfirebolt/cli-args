@@ -23,7 +23,7 @@ final class IntegerConverter extends BaseValueConverter<Integer> {
   }
 
   @Override
-  protected Integer convert(String value) {
+  protected Integer doConvert(String value) {
     return Integer.parseInt(value);
   }
 }

@@ -37,7 +37,11 @@ public abstract non-sealed class BaseValueConverter<T> implements ValueConverter
   @Override
   public final T convert(Class<?> targetClass, String value) {
     validateTargetType(targetClass);
-    return convert(value);
+    try {
+      return doConvert(value);
+    } catch (Exception exc) {
+      throw new UnsupportedConversionException(exc.getMessage(), exc);
+    }
   }
 
   private void validateTargetType(Class<?> targetClass) {
@@ -52,5 +56,5 @@ public abstract non-sealed class BaseValueConverter<T> implements ValueConverter
    * @param value value to convert
    * @return converted value
    */
-  protected abstract T convert(String value);
+  protected abstract T doConvert(String value);
 }

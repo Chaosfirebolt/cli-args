@@ -16,14 +16,5 @@
 
 package com.github.chaosfirebolt.converter.cli.api.converter;
 
-final class DoubleConverter extends BaseValueConverter<Double> {
-
-  DoubleConverter() {
-    super(Double.class);
-  }
-
-  @Override
-  protected Double doConvert(String value) {
-    return Double.valueOf(value);
-  }
+public class UnsupportedClass {
 }

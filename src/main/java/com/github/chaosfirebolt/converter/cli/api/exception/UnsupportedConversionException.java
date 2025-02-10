@@ -27,4 +27,11 @@ public class UnsupportedConversionException extends UnrecoverableException {
   public UnsupportedConversionException(String message) {
     super(message);
   }
+
+  /**
+   * @see Exception#Exception(String, Throwable) parent constructor
+   */
+  public UnsupportedConversionException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

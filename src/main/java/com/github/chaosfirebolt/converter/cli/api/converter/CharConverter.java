@@ -23,7 +23,7 @@ final class CharConverter extends BaseValueConverter<Character> {
   }
 
   @Override
-  protected Character convert(String value) {
+  protected Character doConvert(String value) {
     if (value.length() == 1) {
       return value.charAt(0);
     }

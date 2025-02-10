@@ -23,7 +23,7 @@ final class ByteConverter extends BaseValueConverter<Byte> {
   }
 
   @Override
-  protected Byte convert(String value) {
+  protected Byte doConvert(String value) {
     return Byte.valueOf(value);
   }
 }

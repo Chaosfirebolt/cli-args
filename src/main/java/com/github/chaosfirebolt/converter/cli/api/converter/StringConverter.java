@@ -23,7 +23,7 @@ final class StringConverter extends BaseValueConverter<String> {
   }
 
   @Override
-  protected String convert(String value) {
+  protected String doConvert(String value) {
     return value;
   }
 }

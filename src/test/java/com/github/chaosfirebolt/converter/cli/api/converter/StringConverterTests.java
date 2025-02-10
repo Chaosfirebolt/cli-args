@@ -16,14 +16,19 @@
 
 package com.github.chaosfirebolt.converter.cli.api.converter;
 
-final class DoubleConverter extends BaseValueConverter<Double> {
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-  DoubleConverter() {
-    super(Double.class);
-  }
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-  @Override
-  protected Double doConvert(String value) {
-    return Double.valueOf(value);
+public class StringConverterTests {
+
+  private final StringConverter converter = new StringConverter();
+
+  @ParameterizedTest
+  @ValueSource(strings = {"a", "b", "qwerty"})
+  public void doConvertShouldReturnSameInstance(String value) {
+    String result = converter.convert(String.class, value);
+    assertSame(value, result, "Convert should return the same instance");
   }
 }

@@ -23,7 +23,7 @@ final class FloatConverter extends BaseValueConverter<Float> {
   }
 
   @Override
-  protected Float convert(String value) {
+  protected Float doConvert(String value) {
     return Float.valueOf(value);
   }
 }

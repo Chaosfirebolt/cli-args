@@ -23,7 +23,7 @@ final class LongConverter extends BaseValueConverter<Long> {
   }
 
   @Override
-  protected Long convert(String value) {
+  protected Long doConvert(String value) {
     return Long.valueOf(value);
   }
 }

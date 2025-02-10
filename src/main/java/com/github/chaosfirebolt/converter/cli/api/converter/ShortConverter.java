@@ -23,7 +23,7 @@ final class ShortConverter extends BaseValueConverter<Short> {
   }
 
   @Override
-  protected Short convert(String value) {
+  protected Short doConvert(String value) {
     return Short.valueOf(value);
   }
 }
