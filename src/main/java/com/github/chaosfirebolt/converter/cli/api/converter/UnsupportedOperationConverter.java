@@ -16,20 +16,12 @@
 
 package com.github.chaosfirebolt.converter.cli.api.converter;
 
-/**
- * Converts values to required type.
- *
- * @param <T> type to convert to
- */
-public sealed interface ValueConverter<T> permits BaseValueConverter, DelegatingValueConverter, UnsupportedOperationConverter {
+import com.github.chaosfirebolt.converter.cli.api.exception.UnsupportedConversionException;
 
-  /**
-   * Converts provided values to the target type.
-   *
-   * @param targetClass type to convert to
-   * @param value       values to be converted
-   * @return converted value
-   * @throws com.github.chaosfirebolt.converter.cli.api.exception.UnsupportedConversionException if unable to convert value to target type
-   */
-  T convert(Class<?> targetClass, String value);
+final class UnsupportedOperationConverter implements ValueConverter<Object> {
+
+  @Override
+  public Object convert(Class<?> targetClass, String value) {
+    throw new UnsupportedConversionException("Not supported conversion to " + targetClass);
+  }
 }

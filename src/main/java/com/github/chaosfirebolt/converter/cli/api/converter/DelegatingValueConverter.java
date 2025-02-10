@@ -16,8 +16,6 @@
 
 package com.github.chaosfirebolt.converter.cli.api.converter;
 
-import com.github.chaosfirebolt.converter.cli.api.exception.UnsupportedConversionException;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +23,8 @@ import java.util.Map;
  * Delegates the conversion operation to the correct converter.
  */
 public final class DelegatingValueConverter implements ValueConverter<Object> {
+
+  private static final UnsupportedOperationConverter UNSUPPORTED_OPERATION_CONVERTER = new UnsupportedOperationConverter();
 
   private final Map<Class<?>, ValueConverter<?>> converters;
 
@@ -38,7 +38,6 @@ public final class DelegatingValueConverter implements ValueConverter<Object> {
   private static Map<Class<?>, ValueConverter<?>> initDefaultConverters() {
     Map<Class<?>, ValueConverter<?>> converters = new HashMap<>();
     converters.put(String.class, new StringConverter());
-
     converters.put(Integer.class, new IntegerConverter());
     converters.put(Byte.class, new ByteConverter());
     converters.put(Short.class, new ShortConverter());
@@ -52,11 +51,8 @@ public final class DelegatingValueConverter implements ValueConverter<Object> {
 
   @Override
   public Object convert(Class<?> targetClass, String value) {
-    ValueConverter<?> converter = converters.get(targetClass);
-    if (converter == null) {
-      throw new UnsupportedConversionException("Not supported conversion to " + targetClass);
-    }
-    return converter.convert(targetClass, value);
+    ValueConverter<?> delegate = converters.getOrDefault(targetClass, UNSUPPORTED_OPERATION_CONVERTER);
+    return delegate.convert(targetClass, value);
   }
 
   /**
