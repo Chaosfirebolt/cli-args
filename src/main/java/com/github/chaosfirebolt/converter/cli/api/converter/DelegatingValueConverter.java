@@ -37,6 +37,8 @@ public final class DelegatingValueConverter implements ValueConverter<Object> {
 
   private static Map<Class<?>, ValueConverter<?>> initDefaultConverters() {
     Map<Class<?>, ValueConverter<?>> converters = new HashMap<>();
+    converters.put(String.class, new StringConverter());
+
     converters.put(Integer.class, new IntegerConverter());
     converters.put(Byte.class, new ByteConverter());
     converters.put(Short.class, new ShortConverter());
