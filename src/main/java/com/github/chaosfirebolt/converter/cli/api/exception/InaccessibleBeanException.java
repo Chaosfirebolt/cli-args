@@ -14,18 +14,17 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.internal.introspection;
+package com.github.chaosfirebolt.converter.cli.api.exception;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
-import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
+/**
+ * Signals a bean can't be accessed.
+ */
+public class InaccessibleBeanException extends UnrecoverableException {
 
-interface ArgumentHandlerFactory {
-
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
+  /**
+   * @see Exception#Exception(String) parent constructor
+   */
+  public InaccessibleBeanException(String message, Throwable cause) {
+    super(message, cause);
   }
-
-  ArgumentHandler create(ValueConverter<Object> converter);
 }

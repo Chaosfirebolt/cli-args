@@ -16,16 +16,10 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
-import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
+import java.util.List;
 
-interface ArgumentHandlerFactory {
+@FunctionalInterface
+public interface OptionParser {
 
-  Argument argument();
-
-  default boolean isAnnotated() {
-    return argument() != null;
-  }
-
-  ArgumentHandler create(ValueConverter<Object> converter);
+  Object parse(List<String> values);
 }

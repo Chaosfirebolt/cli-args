@@ -22,9 +22,7 @@ import com.github.chaosfirebolt.converter.cli.api.exception.MissingMandatoryArgu
 import com.github.chaosfirebolt.converter.cli.internal.parse.Option;
 import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Set argument value in a bean.
@@ -33,12 +31,10 @@ public final class ArgumentHandler {
 
   private final Argument argument;
   private final BeanMutator mutator;
-  private final Function<List<String>, ?> parser;
 
-  ArgumentHandler(Argument argument, BeanMutator mutator, Function<List<String>, ?> parser) {
+  ArgumentHandler(Argument argument, BeanMutator mutator) {
     this.argument = argument;
     this.mutator = mutator;
-    this.parser = parser;
   }
 
   /**
@@ -50,9 +46,7 @@ public final class ArgumentHandler {
    */
   public void handle(Options options, ArgumentsContainer container) {
     Optional<Option> extractedOption = extract(options);
-    extractedOption
-            .map(option -> option.parse(parser))
-            .ifPresent(value -> mutator.set(container, value));
+    extractedOption.ifPresent(option -> mutator.mutate(container, option));
   }
 
   private Optional<Option> extract(Options options) {

@@ -24,9 +24,7 @@ import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,41 +38,39 @@ public class ArgumentHandlerTests {
   private final Options options = mock(Options.class);
   private final ArgumentsContainer container = mock();
 
-  private final Object parseResult = new Object();
   private ArgumentHandler argumentHandler;
 
   @BeforeEach
   public void setUp() {
     this.argument = mock();
     this.beanMutator = mock();
-    Function<List<String>, Object> parser = mock();
 
     when(argument.name()).thenReturn("--name");
     when(argument.aliases()).thenReturn(new String[]{"-n"});
 
-    doNothing().when(beanMutator).set(any(), any());
+    doNothing().when(beanMutator).mutate(any(), any());
 
-    when(parser.apply(any())).thenReturn(parseResult);
-
-    this.argumentHandler = new ArgumentHandler(argument, beanMutator, parser);
+    this.argumentHandler = new ArgumentHandler(argument, beanMutator);
   }
 
   @Test
   public void nonMandatory_NameFound_ShouldInvoke() {
     when(argument.mandatory()).thenReturn(false);
-    when(options.get("--name")).thenReturn(Optional.of(Option.builder().setKey("--name").addValue("").build()));
+    Option option = Option.builder().setKey("--name").addValue("").build();
+    when(options.get("--name")).thenReturn(Optional.of(option));
 
     argumentHandler.handle(options, container);
-    verify(beanMutator, times(1)).set(container, parseResult);
+    verify(beanMutator, times(1)).mutate(container, option);
   }
 
   @Test
   public void nonMandatory_AliasFound_ShouldInvoke() {
     when(argument.mandatory()).thenReturn(false);
-    when(options.get("-n")).thenReturn(Optional.of(Option.builder().setKey("-n").addValue("").build()));
+    Option option = Option.builder().setKey("-n").addValue("").build();
+    when(options.get("-n")).thenReturn(Optional.of(option));
 
     argumentHandler.handle(options, container);
-    verify(beanMutator, times(1)).set(container, parseResult);
+    verify(beanMutator, times(1)).mutate(container, option);
   }
 
   @Test
@@ -82,7 +78,7 @@ public class ArgumentHandlerTests {
     when(argument.mandatory()).thenReturn(false);
 
     argumentHandler.handle(options, container);
-    verify(beanMutator, never()).set(any(), any());
+    verify(beanMutator, never()).mutate(any(), any());
   }
 
   @Test

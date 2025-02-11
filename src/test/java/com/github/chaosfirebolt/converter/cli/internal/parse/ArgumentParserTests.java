@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,7 +49,8 @@ public class ArgumentParserTests {
       assertTrue(res.isPresent(), () -> "Expected option not found - " + expectedOption.key);
       Option option = res.get();
       assertEquals(expectedOption.key, option.key(), "Incorrect option found");
-      List<String> actualValues = option.parse(Function.identity());
+      @SuppressWarnings("unchecked")
+      List<String> actualValues = (List<String>) option.parse(values -> values);
       assertEquals(expectedOption.values, actualValues, () -> "Incorrectly parsed option - " + expectedOption.key);
     }
   }

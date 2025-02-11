@@ -17,12 +17,12 @@
 package com.github.chaosfirebolt.converter.cli.internal.parse;
 
 import com.github.chaosfirebolt.converter.cli.api.exception.UnrecoverableException;
+import com.github.chaosfirebolt.converter.cli.internal.introspection.OptionParser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -68,13 +68,12 @@ public final class Option {
    * Parses the values to the required type using provided parser.
    *
    * @param parser the parser
-   * @param <T>    type of the result
    * @return a parsed value
    * @throws NullPointerException if parser is null
    */
-  public <T> T parse(Function<List<String>, T> parser) {
+  public Object parse(OptionParser parser) {
     Objects.requireNonNull(parser);
-    return parser.apply(values);
+    return parser.parse(values);
   }
 
   /**

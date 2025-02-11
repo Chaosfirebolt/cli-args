@@ -16,12 +16,19 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
+import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
+
 import java.lang.reflect.Field;
 
 class FieldMutator extends BaseBeanMutator<Field> {
 
-  FieldMutator(Field field) {
-    super(field);
+  FieldMutator(Field field, ValueConverter<Object> converter) {
+    super(field, converter);
+  }
+
+  @Override
+  TargetClass resolveTargetClass() {
+    return TargetClassResolver.resolveTarget(member.getGenericType());
   }
 
   @Override

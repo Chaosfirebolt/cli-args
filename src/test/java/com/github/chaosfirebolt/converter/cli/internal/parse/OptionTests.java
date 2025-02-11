@@ -18,13 +18,13 @@ package com.github.chaosfirebolt.converter.cli.internal.parse;
 
 import com.github.chaosfirebolt.converter.cli.api.exception.InvalidArgumentsException;
 import com.github.chaosfirebolt.converter.cli.api.exception.UnrecoverableException;
+import com.github.chaosfirebolt.converter.cli.internal.introspection.OptionParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,23 +72,19 @@ public class OptionTests {
   @Test
   public void parse_ShouldReturnCorrectly() {
     Option option = Option.builder().setKey("invalid").addValue("1").build();
-    List<String> expectedValues = List.of("1");
+    List<String> values = List.of("1");
 
-    Function<List<String>, Integer> parser = mock();
-    when(parser.apply(expectedValues)).thenAnswer(invocation -> {
-      List<String> optionValues = invocation.getArgument(0);
-      return Integer.parseInt(optionValues.get(0));
-    });
+    OptionParser parser = mock();
 
-    int actualValue = option.parse(parser);
-    assertEquals(1, actualValue, "Incorrect parse result");
-    verify(parser, times(1)).apply(expectedValues);
+    option.parse(parser);
+    verify(parser, times(1)).parse(values);
   }
 
   @Test
   public void valuesShouldBeUnmodifiable() {
     Option option = Option.builder().setKey("invalid").addValue("1").addValue("2").addValue("3").build();
-    List<String> extractedValues = option.parse(Function.identity());
+    @SuppressWarnings("unchecked")
+    List<String> extractedValues = (List<String>) option.parse(values -> values);
     assertThrows(UnsupportedOperationException.class, extractedValues::clear, "Values list was modifiable");
   }
 }

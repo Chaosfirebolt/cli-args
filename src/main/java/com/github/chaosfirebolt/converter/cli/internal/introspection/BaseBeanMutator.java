@@ -16,15 +16,29 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
+import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
+import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
+import com.github.chaosfirebolt.converter.cli.api.exception.InaccessibleBeanException;
+import com.github.chaosfirebolt.converter.cli.internal.parse.Option;
+
 import java.lang.reflect.AccessibleObject;
+import java.util.function.BiFunction;
 
 abstract class BaseBeanMutator<T extends AccessibleObject> implements BeanMutator {
 
   protected final T member;
+  private final ValueConverter<Object> converter;
+  private final BiFunction<ValueConverter<Object>, TargetClass, OptionParser> optionParserFactory;
 
-  BaseBeanMutator(T member) {
+  BaseBeanMutator(T member, ValueConverter<Object> converter, BiFunction<ValueConverter<Object>, TargetClass, OptionParser> optionParserFactory) {
     this.member = member;
+    this.converter = converter;
+    this.optionParserFactory = optionParserFactory;
     allowAccess();
+  }
+
+  public BaseBeanMutator(T member, ValueConverter<Object> converter) {
+    this(member, converter, SingleValueOptionParser::new);
   }
 
   private void allowAccess() {
@@ -32,13 +46,18 @@ abstract class BaseBeanMutator<T extends AccessibleObject> implements BeanMutato
   }
 
   @Override
-  public final void set(Object bean, Object value) {
+  public final void mutate(ArgumentsContainer bean, Option option) {
+    TargetClass targetClass = resolveTargetClass();
+    OptionParser optionParser = optionParserFactory.apply(converter, targetClass);
+    Object valueToSet = option.parse(optionParser);
     try {
-      doSet(bean, value);
+      doSet(bean, valueToSet);
     } catch (IllegalAccessException exc) {
-      throw new RuntimeException(exc);
+      throw new InaccessibleBeanException("Unable to set value in bean", exc);
     }
   }
+
+  abstract TargetClass resolveTargetClass();
 
   abstract void doSet(Object bean, Object value) throws IllegalAccessException;
 }

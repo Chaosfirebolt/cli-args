@@ -17,13 +17,13 @@
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
 import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
+import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
 import com.github.chaosfirebolt.converter.cli.internal.container.BeanContainerFactory;
 import com.github.chaosfirebolt.converter.cli.internal.container.ContainerFactory;
 
 import java.lang.reflect.AccessibleObject;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -31,16 +31,16 @@ abstract class BeanIntrospector<T extends AccessibleObject> implements Introspec
 
   private final Supplier<ArgumentsContainer> instanceSupplier;
   private final UniqueNamesValidator uniqueNamesValidator;
-  private final Function<List<String>, ?> parser;
+  private final ValueConverter<Object> converter;
 
-  BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, UniqueNamesValidator uniqueNamesValidator, Function<List<String>, ?> parser) {
+  BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, UniqueNamesValidator uniqueNamesValidator, ValueConverter<Object> converter) {
     this.instanceSupplier = instanceSupplier;
     this.uniqueNamesValidator = uniqueNamesValidator;
-    this.parser = parser;
+    this.converter = converter;
   }
 
-  BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, Set<String> argumentNames, Function<List<String>, ?> parser) {
-    this(instanceSupplier, new UniqueNamesValidator(argumentNames), parser);
+  BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, Set<String> argumentNames, ValueConverter<Object> converter) {
+    this(instanceSupplier, new UniqueNamesValidator(argumentNames), converter);
   }
 
   @Override
@@ -49,7 +49,7 @@ abstract class BeanIntrospector<T extends AccessibleObject> implements Introspec
             .map(this::createArgumentHandlerFactory)
             .filter(ArgumentHandlerFactory::isAnnotated)
             .peek(factory -> uniqueNamesValidator.validate(factory.argument()))
-            .map(factory -> factory.create(parser))
+            .map(factory -> factory.create(converter))
             .toList();
     return new BeanContainerFactory(instanceSupplier, handlers);
   }

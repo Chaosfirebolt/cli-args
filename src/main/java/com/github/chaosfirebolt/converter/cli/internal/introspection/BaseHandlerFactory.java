@@ -17,10 +17,9 @@
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
 import com.github.chaosfirebolt.converter.cli.api.Argument;
+import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
 
 import java.lang.reflect.AccessibleObject;
-import java.util.List;
-import java.util.function.Function;
 
 abstract class BaseHandlerFactory<T extends AccessibleObject> implements ArgumentHandlerFactory {
 
@@ -38,10 +37,10 @@ abstract class BaseHandlerFactory<T extends AccessibleObject> implements Argumen
   }
 
   @Override
-  public final ArgumentHandler create(Function<List<String>, ?> parser) {
-    BeanMutator mutator = createMutator(member);
-    return new ArgumentHandler(argument, mutator, parser);
+  public final ArgumentHandler create(ValueConverter<Object> converter) {
+    BeanMutator mutator = createMutator(member, converter);
+    return new ArgumentHandler(argument, mutator);
   }
 
-  abstract BeanMutator createMutator(T member);
+  abstract BeanMutator createMutator(T member, ValueConverter<Object> converter);
 }

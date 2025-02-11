@@ -16,6 +16,8 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
+import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
+
 import java.lang.reflect.Field;
 
 class FieldArgumentHandlerFactory extends BaseHandlerFactory<Field> {
@@ -25,7 +27,7 @@ class FieldArgumentHandlerFactory extends BaseHandlerFactory<Field> {
   }
 
   @Override
-  BeanMutator createMutator(Field member) {
-    return new FieldMutator(member);
+  BeanMutator createMutator(Field member, ValueConverter<Object> converter) {
+    return new FieldMutator(member, converter);
   }
 }

@@ -17,11 +17,10 @@
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
 import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
+import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -35,10 +34,10 @@ public class FieldBeanIntrospector extends BeanIntrospector<Field> {
    *
    * @param instanceSupplier supplier of an instance to set data in
    * @param argumentNames    container for names of all arguments
-   * @param parser           the parser
+   * @param converter        the converter
    */
-  public FieldBeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, Set<String> argumentNames, Function<List<String>, ?> parser) {
-    super(instanceSupplier, argumentNames, parser);
+  public FieldBeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, Set<String> argumentNames, ValueConverter<Object> converter) {
+    super(instanceSupplier, argumentNames, converter);
   }
 
   @Override
