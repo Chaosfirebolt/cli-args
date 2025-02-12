@@ -16,7 +16,7 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+import com.github.chaosfirebolt.converter.cli.api.annotation.Argument;
 import com.github.chaosfirebolt.converter.cli.api.exception.DuplicateArgumentNameException;
 
 import java.util.Set;

@@ -16,7 +16,7 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
-import com.github.chaosfirebolt.converter.cli.api.Argument;
+import com.github.chaosfirebolt.converter.cli.api.annotation.Argument;
 import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
 import com.github.chaosfirebolt.converter.cli.api.exception.MissingMandatoryArgumentException;
 import com.github.chaosfirebolt.converter.cli.internal.parse.Option;

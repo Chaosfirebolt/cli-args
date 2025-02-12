@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.github.chaosfirebolt.converter.cli.api;
+package com.github.chaosfirebolt.converter.cli.api.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
