@@ -23,24 +23,25 @@ import com.github.chaosfirebolt.converter.cli.internal.container.ContainerFactor
 
 import java.lang.reflect.AccessibleObject;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 abstract class BeanIntrospector<T extends AccessibleObject> implements Introspector {
 
-  private final Supplier<ArgumentsContainer> instanceSupplier;
+  private final Map<Class<?>, Supplier<ArgumentsContainer>> instanceSuppliers;
   private final UniqueNamesValidator uniqueNamesValidator;
   private final ValueConverter<Object> converter;
 
-  BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, UniqueNamesValidator uniqueNamesValidator, ValueConverter<Object> converter) {
-    this.instanceSupplier = instanceSupplier;
+  BeanIntrospector(Map<Class<?>, Supplier<ArgumentsContainer>> instanceSuppliers, UniqueNamesValidator uniqueNamesValidator, ValueConverter<Object> converter) {
+    this.instanceSuppliers = instanceSuppliers;
     this.uniqueNamesValidator = uniqueNamesValidator;
     this.converter = converter;
   }
 
-  BeanIntrospector(Supplier<ArgumentsContainer> instanceSupplier, Set<String> argumentNames, ValueConverter<Object> converter) {
-    this(instanceSupplier, new UniqueNamesValidator(argumentNames), converter);
+  BeanIntrospector(Map<Class<?>, Supplier<ArgumentsContainer>> instanceSuppliers, Set<String> argumentNames, ValueConverter<Object> converter) {
+    this(instanceSuppliers, new UniqueNamesValidator(argumentNames), converter);
   }
 
   @Override
@@ -51,6 +52,7 @@ abstract class BeanIntrospector<T extends AccessibleObject> implements Introspec
             .peek(factory -> uniqueNamesValidator.validate(factory.argument()))
             .map(factory -> factory.create(converter))
             .toList();
+    Supplier<ArgumentsContainer> instanceSupplier = instanceSuppliers.get(clazz);
     return new BeanContainerFactory(instanceSupplier, handlers);
   }
 
