@@ -21,6 +21,9 @@ import com.github.chaosfirebolt.converter.cli.internal.introspection.Introspecto
 import com.github.chaosfirebolt.converter.cli.internal.parse.ArgumentParser;
 import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
 
+/**
+ * Class parsing command line arguments, according to the configuration.
+ */
 public final class CommandLineArguments {
 
   private final ArgumentParser argumentParser;
@@ -31,13 +34,26 @@ public final class CommandLineArguments {
     this.introspector = introspector;
   }
 
+  /**
+   * Creates a new {@link CliArgsBuilder}.
+   *
+   * @return new builder instance
+   */
   public static CliArgsBuilder builder() {
     return new CliArgsBuilder();
   }
 
-  public <T extends ArgumentsContainer> T parse(Class<T> clazz, String... args) {
+  /**
+   * Parses the provided arguments to the target class .
+   *
+   * @param targetClass class to parse the arguments into
+   * @param args        arguments to parse
+   * @param <T>         exact type to parse into
+   * @return an instance of arguments container
+   */
+  public <T extends ArgumentsContainer> T parse(Class<T> targetClass, String... args) {
     Options options = argumentParser.parse(args);
-    ContainerFactory<T> containerFactory = introspector.introspect(clazz);
+    ContainerFactory<T> containerFactory = introspector.introspect(targetClass);
     return containerFactory.createContainer(options);
   }
 }
