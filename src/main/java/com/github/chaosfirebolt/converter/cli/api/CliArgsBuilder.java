@@ -16,7 +16,13 @@
 
 package com.github.chaosfirebolt.converter.cli.api;
 
+import com.github.chaosfirebolt.converter.cli.internal.introspection.FieldBeanIntrospector;
+import com.github.chaosfirebolt.converter.cli.internal.introspection.Introspector;
+import com.github.chaosfirebolt.converter.cli.internal.parse.ArgumentParser;
+import com.github.chaosfirebolt.converter.cli.internal.parse.KeyPrefix;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public final class CliArgsBuilder {
@@ -28,4 +34,11 @@ public final class CliArgsBuilder {
   }
 
   //TODO finish builder
+
+  public CommandLineArguments build() {
+    KeyPrefix prefix = prefixes.isEmpty() ? new KeyPrefix() : new KeyPrefix(prefixes);
+    ArgumentParser argumentParser = new ArgumentParser(prefix);
+    Introspector introspector = new FieldBeanIntrospector(new HashSet<>(), null);
+    return new CommandLineArguments(argumentParser, introspector);
+  }
 }

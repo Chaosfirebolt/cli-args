@@ -21,8 +21,10 @@ import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
 
 /**
  * Factory responsible to create an {@link ArgumentsContainer} instance from parsed options.
+ *
+ * @param <T> exact type of teh container created by this factory
  */
-public interface ContainerFactory {
+public interface ContainerFactory<T extends ArgumentsContainer> {
 
   /**
    * Creates a container instance from provided {@link Options}.
@@ -30,5 +32,5 @@ public interface ContainerFactory {
    * @param options options to use
    * @return a container instance
    */
-  ArgumentsContainer createContainer(Options options);
+  T createContainer(Options options);
 }

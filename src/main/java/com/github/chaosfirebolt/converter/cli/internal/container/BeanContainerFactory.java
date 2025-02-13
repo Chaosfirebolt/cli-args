@@ -26,9 +26,9 @@ import java.util.function.Supplier;
 /**
  * Factory creating java bean type containers - no args constructor, setters.
  */
-public class BeanContainerFactory implements ContainerFactory {
+public class BeanContainerFactory<T extends ArgumentsContainer> implements ContainerFactory<T> {
 
-  private final Supplier<ArgumentsContainer> instanceSupplier;
+  private final Supplier<T> instanceSupplier;
   private final List<ArgumentHandler> handlers;
 
   /**
@@ -37,14 +37,14 @@ public class BeanContainerFactory implements ContainerFactory {
    * @param instanceSupplier supplier of an instance to work with
    * @param handlers         handlers
    */
-  public BeanContainerFactory(Supplier<ArgumentsContainer> instanceSupplier, List<ArgumentHandler> handlers) {
+  public BeanContainerFactory(Supplier<T> instanceSupplier, List<ArgumentHandler> handlers) {
     this.instanceSupplier = instanceSupplier;
     this.handlers = handlers;
   }
 
   @Override
-  public ArgumentsContainer createContainer(Options options) {
-    ArgumentsContainer container = instanceSupplier.get();
+  public T createContainer(Options options) {
+    T container = instanceSupplier.get();
     for (ArgumentHandler argument : handlers) {
       argument.handle(options, container);
     }

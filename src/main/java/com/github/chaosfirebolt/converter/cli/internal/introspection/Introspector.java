@@ -16,6 +16,8 @@
 
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
+import com.github.chaosfirebolt.converter.cli.api.ArgumentsContainer;
+import com.github.chaosfirebolt.converter.cli.api.exception.UnrecoverableException;
 import com.github.chaosfirebolt.converter.cli.internal.container.ContainerFactory;
 
 /**
@@ -24,12 +26,13 @@ import com.github.chaosfirebolt.converter.cli.internal.container.ContainerFactor
 public interface Introspector {
 
   /**
-   * Introspect a class and return a factory for containers.
+   * Introspect a class and return a factory for {@link ArgumentsContainer}s.
    * Throws an exception in case of invalid setup.
    *
    * @param clazz class to be introspected
+   * @param <T>   exact type of the argument container class
    * @return factory capable of creating a container
-   * @throws com.github.chaosfirebolt.converter.cli.api.exception.UnrecoverableException in case of invalid setup
+   * @throws UnrecoverableException in case of invalid setup
    */
-  ContainerFactory introspect(Class<?> clazz);
+  <T extends ArgumentsContainer> ContainerFactory<T> introspect(Class<T> clazz) throws UnrecoverableException;
 }
