@@ -22,6 +22,7 @@ package com.github.chaosfirebolt.converter.cli.api.exception;
 public class UnsupportedConversionException extends UnrecoverableException {
 
   /**
+   * @param message exception message
    * @see Exception#Exception(String) parent constructor
    */
   public UnsupportedConversionException(String message) {
@@ -29,6 +30,8 @@ public class UnsupportedConversionException extends UnrecoverableException {
   }
 
   /**
+   * @param message exception message
+   * @param cause   causing exception
    * @see Exception#Exception(String, Throwable) parent constructor
    */
   public UnsupportedConversionException(String message, Throwable cause) {

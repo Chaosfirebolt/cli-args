@@ -21,10 +21,17 @@ package com.github.chaosfirebolt.converter.cli.api.exception;
  */
 public abstract class UnrecoverableException extends RuntimeException {
 
+  /**
+   * @param message exception message
+   */
   protected UnrecoverableException(String message) {
     super(message);
   }
 
+  /**
+   * @param message exception message
+   * @param cause   causing exception
+   */
   protected UnrecoverableException(String message, Throwable cause) {
     super(message, cause);
   }

@@ -22,6 +22,7 @@ package com.github.chaosfirebolt.converter.cli.api.exception;
 public class MissingMandatoryArgumentException extends UnrecoverableException {
 
   /**
+   * @param message exception message
    * @see Exception#Exception(String) parent constructor
    */
   public MissingMandatoryArgumentException(String message) {

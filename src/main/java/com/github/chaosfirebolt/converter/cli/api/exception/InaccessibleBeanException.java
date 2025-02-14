@@ -22,6 +22,8 @@ package com.github.chaosfirebolt.converter.cli.api.exception;
 public class InaccessibleBeanException extends UnrecoverableException {
 
   /**
+   * @param message exception message
+   * @param cause causing exception
    * @see Exception#Exception(String) parent constructor
    */
   public InaccessibleBeanException(String message, Throwable cause) {
