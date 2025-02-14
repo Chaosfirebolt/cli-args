@@ -22,8 +22,21 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 class TargetClassResolver {
+
+  private static final Map<String, Class<?>> PRIMITIVE_NAME_TO_WRAPPER = Map.of(
+          "int", Integer.class,
+          "byte", Byte.class,
+          "short", Short.class,
+          "long", Long.class,
+          "double", Double.class,
+          "float", Float.class,
+          "boolean", Boolean.class,
+          "char", Character.class,
+          "void", Void.class
+  );
 
   private TargetClassResolver() {
   }
@@ -41,6 +54,10 @@ class TargetClassResolver {
   }
 
   private static Class<?> loadClass(Type type) {
+    Class<?> primitiveWrapperClass = PRIMITIVE_NAME_TO_WRAPPER.get(type.getTypeName());
+    if (primitiveWrapperClass != null) {
+      return primitiveWrapperClass;
+    }
     try {
       return Class.forName(type.getTypeName());
     } catch (ClassNotFoundException exc) {
