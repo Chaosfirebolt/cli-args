@@ -56,6 +56,8 @@ class TargetClassResolver {
   private static Class<?> loadClass(Type type) {
     Class<?> primitiveWrapperClass = PRIMITIVE_NAME_TO_WRAPPER.get(type.getTypeName());
     if (primitiveWrapperClass != null) {
+      //Class object for primitives cannot be created using forName()
+      //fallback to the class object for wrappers
       return primitiveWrapperClass;
     }
     try {
