@@ -18,6 +18,7 @@ package com.github.chaosfirebolt.converter.cli.api;
 
 import com.github.chaosfirebolt.converter.cli.api.converter.DelegatingValueConverter;
 import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
+import com.github.chaosfirebolt.converter.cli.internal.introspection.CachingIntrospector;
 import com.github.chaosfirebolt.converter.cli.internal.introspection.FieldBeanIntrospector;
 import com.github.chaosfirebolt.converter.cli.internal.introspection.Introspector;
 import com.github.chaosfirebolt.converter.cli.internal.parse.ArgumentParser;
@@ -25,6 +26,7 @@ import com.github.chaosfirebolt.converter.cli.internal.parse.KeyPrefix;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -35,10 +37,12 @@ public final class CliArgsBuilder {
 
   private final List<String> prefixes;
   private final DelegatingValueConverter delegatingValueConverter;
+  private boolean cacheIntrospection;
 
   CliArgsBuilder() {
     this.prefixes = new ArrayList<>();
     this.delegatingValueConverter = new DelegatingValueConverter();
+    this.cacheIntrospection = false;
   }
 
   /**
@@ -88,6 +92,19 @@ public final class CliArgsBuilder {
   }
 
   /**
+   * Sets whether to cache introspection results.
+   * Use {@code true} to enable caching, {@code false} to disable it.
+   * Default state is disabled.
+   *
+   * @param cacheIntrospection flag whether to cache introspection result
+   * @return this builder
+   */
+  public CliArgsBuilder setCacheIntrospection(boolean cacheIntrospection) {
+    this.cacheIntrospection = cacheIntrospection;
+    return this;
+  }
+
+  /**
    * Create new instance of {@link CommandLineArguments} from this builder.
    *
    * @return new instance of command line arguments
@@ -95,7 +112,12 @@ public final class CliArgsBuilder {
   public CommandLineArguments build() {
     KeyPrefix prefix = prefixes.isEmpty() ? new KeyPrefix() : new KeyPrefix(prefixes);
     ArgumentParser argumentParser = new ArgumentParser(prefix);
-    Introspector introspector = new FieldBeanIntrospector(new HashSet<>(), delegatingValueConverter);
+    Introspector actualIntrospector = createActualIntrospector();
+    Introspector introspector = cacheIntrospection ? new CachingIntrospector(new HashMap<>(), actualIntrospector) : actualIntrospector;
     return new CommandLineArguments(argumentParser, introspector);
+  }
+
+  private Introspector createActualIntrospector() {
+    return new FieldBeanIntrospector(new HashSet<>(), delegatingValueConverter);
   }
 }
