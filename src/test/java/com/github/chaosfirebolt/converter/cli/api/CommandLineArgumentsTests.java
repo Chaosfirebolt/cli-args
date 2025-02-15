@@ -21,8 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandLineArgumentsTests {
 
@@ -35,6 +34,7 @@ public class CommandLineArgumentsTests {
             .addPrefix("#")
             .addPrefixes(List.of("\\"))
             .addConverter(CustomClass.class, new CustomClassConverter())
+            .setCacheIntrospection(true)
             .build();
   }
 
@@ -62,5 +62,8 @@ public class CommandLineArgumentsTests {
     assertTrue(container.getBool(), "Boolean parsed incorrectly");
     assertEquals(new CustomClass(customClassValue), container.getCustomClass(), "Custom class parsed incorrectly");
     assertEquals(someByte, container.getSomeByte(), "Byte parsed incorrectly");
+
+    TestArgumentsContainer container2 = arguments.parse(TestArgumentsContainer.class, args);
+    assertNotSame(container, container2, "Parsing should return different container instances despite introspection caching");
   }
 }
