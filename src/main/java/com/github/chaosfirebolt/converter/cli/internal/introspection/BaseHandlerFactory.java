@@ -32,7 +32,7 @@ abstract class BaseHandlerFactory<T extends AccessibleObject> implements Argumen
   }
 
   @Override
-  public Argument argument() {
+  public final Argument argument() {
     return argument;
   }
 

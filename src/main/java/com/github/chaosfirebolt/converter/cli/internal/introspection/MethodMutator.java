@@ -18,32 +18,26 @@ package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
 import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
 
-import java.lang.reflect.Field;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 
-/**
- * Introspector for fields of beans.
- */
-public class FieldBeanIntrospector extends BeanIntrospector<Field> {
+class MethodMutator extends BaseBeanMutator<Method> {
 
-  /**
-   * Creates new instance.
-   *
-   * @param argumentNames container for names of all arguments
-   * @param converter     the converter
-   */
-  public FieldBeanIntrospector(Set<String> argumentNames, ValueConverter<Object> converter) {
-    super(argumentNames, converter);
+  MethodMutator(Method member, ValueConverter<Object> converter) {
+    super(member, converter);
   }
 
   @Override
-  Stream<Field> getAnnotatedElements(Class<?> clazz) {
-    return Stream.of(clazz.getDeclaredFields());
+  TargetClass resolveTargetClass() {
+    //methods which do not have exactly 1 parameter are filtered out
+    Parameter parameter = member.getParameters()[0];
+    Type parameterType = parameter.getParameterizedType();
+    return TargetClassResolver.resolveTarget(parameterType);
   }
 
   @Override
-  ArgumentHandlerFactory createArgumentHandlerFactory(Field member) {
-    return new FieldArgumentHandlerFactory(member);
+  void doSet(Object bean, Object value) throws ReflectiveOperationException {
+    member.invoke(bean, value);
   }
 }

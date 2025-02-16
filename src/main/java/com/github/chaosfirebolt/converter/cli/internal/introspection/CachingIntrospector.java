@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * An {@link Introspector} implementation used to cache the result of introspecting a {@link Class}.
  */
-public class CachingIntrospector implements Introspector {
+public final class CachingIntrospector implements Introspector {
 
   private final Map<Class<?>, ContainerFactory<?>> cache;
   private final Introspector delegate;

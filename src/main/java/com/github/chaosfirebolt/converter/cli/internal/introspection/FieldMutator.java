@@ -32,7 +32,7 @@ class FieldMutator extends BaseBeanMutator<Field> {
   }
 
   @Override
-  void doSet(Object bean, Object value) throws IllegalAccessException {
+  void doSet(Object bean, Object value) throws ReflectiveOperationException {
     member.set(bean, value);
   }
 }

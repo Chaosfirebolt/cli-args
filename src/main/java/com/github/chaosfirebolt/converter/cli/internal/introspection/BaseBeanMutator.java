@@ -54,10 +54,12 @@ abstract class BaseBeanMutator<T extends AccessibleObject> implements BeanMutato
       doSet(bean, valueToSet);
     } catch (IllegalAccessException exc) {
       throw new InaccessibleBeanException("Unable to set value in bean", exc);
+    } catch (ReflectiveOperationException e) {
+      throw new RuntimeException(e);
     }
   }
 
   abstract TargetClass resolveTargetClass();
 
-  abstract void doSet(Object bean, Object value) throws IllegalAccessException;
+  abstract void doSet(Object bean, Object value) throws ReflectiveOperationException;
 }
