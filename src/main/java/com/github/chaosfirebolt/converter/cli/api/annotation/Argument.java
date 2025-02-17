@@ -23,9 +23,12 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation to be applied on elements, indicating which arguments to map where.
+ * Elements of some types take higher precedence over other elements.
+ * When applied on methods, fields won't be evaluated for presence of this annotation.
+ * Only setter-like methods (single argument) will be taken into consideration.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Argument {
 
   /**

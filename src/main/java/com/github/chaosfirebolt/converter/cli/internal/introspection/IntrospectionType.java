@@ -22,7 +22,8 @@ import java.util.stream.Stream;
 
 enum IntrospectionType {
 
-  BEAN_FIELD(Integer.MIN_VALUE),
+  UNKNOWN(Integer.MIN_VALUE),
+  BEAN_FIELD(0),
   BEAN_SETTER(Integer.MAX_VALUE);
 
   private static final Comparator<IntrospectionType> COMPARATOR = Comparator.comparing(type -> type.priority);

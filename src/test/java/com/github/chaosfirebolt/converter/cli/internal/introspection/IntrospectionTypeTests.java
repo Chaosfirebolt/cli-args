@@ -50,7 +50,9 @@ class IntrospectionTypeTests {
     return Stream.of(
             Arguments.of(new IntrospectionType[]{IntrospectionType.BEAN_SETTER, IntrospectionType.BEAN_FIELD}, IntrospectionType.BEAN_SETTER),
             Arguments.of(new IntrospectionType[]{IntrospectionType.BEAN_SETTER, null}, IntrospectionType.BEAN_SETTER),
-            Arguments.of(new IntrospectionType[]{null, IntrospectionType.BEAN_FIELD}, IntrospectionType.BEAN_FIELD)
+            Arguments.of(new IntrospectionType[]{null, IntrospectionType.BEAN_FIELD}, IntrospectionType.BEAN_FIELD),
+            Arguments.of(new IntrospectionType[]{IntrospectionType.UNKNOWN, IntrospectionType.BEAN_FIELD}, IntrospectionType.BEAN_FIELD),
+            Arguments.of(new IntrospectionType[]{null, IntrospectionType.UNKNOWN}, IntrospectionType.UNKNOWN)
     );
   }
 }
