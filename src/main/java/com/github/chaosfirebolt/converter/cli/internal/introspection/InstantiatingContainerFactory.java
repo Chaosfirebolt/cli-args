@@ -24,12 +24,24 @@ import com.github.chaosfirebolt.converter.cli.internal.parse.Options;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
  * Creates an instance from any class.
  */
 record InstantiatingContainerFactory<T extends ArgumentsContainer>(Class<T> clazz) implements ContainerFactory<T> {
+
+  private static final Map<Class<?>, Object> TYPE_DEFAULTS = Map.of(
+          byte.class, (byte) 0,
+          short.class, (short) 0,
+          int.class, 0,
+          long.class, 0L,
+          float.class, 0F,
+          double.class, 0.0D,
+          boolean.class, false,
+          char.class, '\u0000'
+  );
 
   @Override
   public T createContainer(Options options) {
@@ -51,11 +63,7 @@ record InstantiatingContainerFactory<T extends ArgumentsContainer>(Class<T> claz
   private Object[] initArgs(Constructor<T> constructor) {
     return Stream.of(constructor.getParameters())
             .map(Parameter::getType)
-            .map(this::toDefaultValue)
+            .map(TYPE_DEFAULTS::get)
             .toArray(Object[]::new);
-  }
-
-  private Object toDefaultValue(Class<?> clazz) {
-    return clazz.isPrimitive() ? clazz == Boolean.TYPE ? false : 0 : null;
   }
 }
