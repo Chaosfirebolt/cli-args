@@ -19,8 +19,10 @@ package com.github.chaosfirebolt.converter.cli.api;
 import com.github.chaosfirebolt.converter.cli.api.converter.DelegatingValueConverter;
 import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
 import com.github.chaosfirebolt.converter.cli.internal.introspection.CachingIntrospector;
+import com.github.chaosfirebolt.converter.cli.internal.introspection.DelegatingIntrospector;
 import com.github.chaosfirebolt.converter.cli.internal.introspection.FieldBeanIntrospector;
 import com.github.chaosfirebolt.converter.cli.internal.introspection.Introspector;
+import com.github.chaosfirebolt.converter.cli.internal.introspection.MethodBeanIntrospector;
 import com.github.chaosfirebolt.converter.cli.internal.parse.ArgumentParser;
 import com.github.chaosfirebolt.converter.cli.internal.parse.KeyPrefix;
 
@@ -29,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Builder for {@link CommandLineArguments}.
@@ -118,6 +121,13 @@ public final class CliArgsBuilder {
   }
 
   private Introspector createActualIntrospector() {
-    return new FieldBeanIntrospector(new HashSet<>(), delegatingValueConverter);
+    Set<String> argumentNames = new HashSet<>();
+
+    DelegatingIntrospector delegatingIntrospector = new DelegatingIntrospector();
+    delegatingIntrospector.registerFieldTypeIntrospector(new FieldBeanIntrospector(argumentNames, delegatingValueConverter));
+    delegatingIntrospector.registerSetterIntrospector(new MethodBeanIntrospector(argumentNames, delegatingValueConverter));
+
+    delegatingIntrospector.validate();
+    return delegatingIntrospector;
   }
 }

@@ -39,7 +39,7 @@ public class CommandLineArgumentsTests {
   }
 
   @Test
-  public void parseCorrectly() {
+  public void fieldConfiguration_parseCorrectly() {
     String string = "test";
     int integer = 11;
     double doubleValue = 12.34;
@@ -65,5 +65,29 @@ public class CommandLineArgumentsTests {
 
     TestArgumentsContainer container2 = arguments.parse(TestArgumentsContainer.class, args);
     assertNotSame(container, container2, "Parsing should return different container instances despite introspection caching");
+  }
+
+  @Test
+  public void setterConfiguration_ShouldParseCorrectly() {
+    String[] args = {
+            "-s", "test",
+            "-i", "11",
+            "-c", "val"
+    };
+    SetterArgumentsContainer container = arguments.parse(SetterArgumentsContainer.class, args);
+    assertEquals("test", container.getString(), "String parsed incorrectly");
+    assertEquals(11, container.getInteger(), "Integer parsed incorrectly");
+    assertEquals(new CustomClass("val"), container.getCustomClass(), "Custom class parsed incorrectly");
+  }
+
+  @Test
+  public void noConfiguration_InstanceShouldBeEmpty() {
+    String[] args = {
+            "-s", "test",
+            "-i", "11",
+            "-c", "val"
+    };
+    NoConfigArgumentsContainer container = arguments.parse(NoConfigArgumentsContainer.class, args);
+    assertNull(container.getString(), "String parsed incorrectly");
   }
 }

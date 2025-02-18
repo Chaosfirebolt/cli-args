@@ -25,6 +25,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+/**
+ * An {@link Introspector} implementation delegating the actual operation to the real introspector,
+ * depending on the configuration.
+ */
 public final class DelegatingIntrospector implements Introspector {
 
   private final Function<Class<?>, IntrospectionType> introspectionResolver;
