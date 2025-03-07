@@ -17,25 +17,20 @@
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
 import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
-import com.github.chaosfirebolt.converter.cli.api.exception.UnsupportedConversionException;
 
 import java.util.List;
 
-final class SingleValueOptionParser extends BaseOptionParser {
+abstract class BaseOptionParser implements OptionParser {
 
-  SingleValueOptionParser(ValueConverter<Object> converter, TargetClass targetClass) {
-    super(converter, targetClass);
+  protected final ValueConverter<Object> converter;
+  protected final TargetClass targetClass;
+
+  BaseOptionParser(ValueConverter<Object> converter, TargetClass targetClass) {
+    this.converter = converter;
+    this.targetClass = targetClass;
   }
 
-  @Override
-  public Object parse(List<String> values) {
-    if (isEmpty(values)) {
-      return null;
-    }
-    if (values.size() > 1) {
-      throw new UnsupportedConversionException(getClass().getSimpleName() + " can only be used with one value at most");
-    }
-    //TODO handle parametric types?
-    return converter.convert(targetClass.mainType(), values.get(0));
+  static boolean isEmpty(List<String> values) {
+    return values == null || values.isEmpty();
   }
 }

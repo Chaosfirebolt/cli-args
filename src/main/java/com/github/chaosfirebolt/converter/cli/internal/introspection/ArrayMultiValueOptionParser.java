@@ -17,25 +17,32 @@
 package com.github.chaosfirebolt.converter.cli.internal.introspection;
 
 import com.github.chaosfirebolt.converter.cli.api.converter.ValueConverter;
-import com.github.chaosfirebolt.converter.cli.api.exception.UnsupportedConversionException;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
-final class SingleValueOptionParser extends BaseOptionParser {
+final class ArrayMultiValueOptionParser extends BaseOptionParser {
 
-  SingleValueOptionParser(ValueConverter<Object> converter, TargetClass targetClass) {
+  ArrayMultiValueOptionParser(ValueConverter<Object> converter, TargetClass targetClass) {
     super(converter, targetClass);
   }
 
   @Override
   public Object parse(List<String> values) {
+    Class<?> componentType = targetClass.parametricTypes().get(0).mainType();
     if (isEmpty(values)) {
-      return null;
+      return createArray(0, componentType);
     }
-    if (values.size() > 1) {
-      throw new UnsupportedConversionException(getClass().getSimpleName() + " can only be used with one value at most");
+    Object[] array = createArray(values.size(), componentType);
+    for (int i = 0; i < values.size(); i++) {
+      String value = values.get(i);
+      Object parsedValue = converter.convert(componentType, value);
+      array[i] = parsedValue;
     }
-    //TODO handle parametric types?
-    return converter.convert(targetClass.mainType(), values.get(0));
+    return array;
+  }
+
+  private static Object[] createArray(int size, Class<?> componentType) {
+    return (Object[]) Array.newInstance(componentType, size);
   }
 }

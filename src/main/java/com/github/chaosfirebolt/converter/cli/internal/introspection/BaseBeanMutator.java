@@ -37,8 +37,8 @@ abstract class BaseBeanMutator<T extends AccessibleObject> implements BeanMutato
     allowAccess();
   }
 
-  public BaseBeanMutator(T member, ValueConverter<Object> converter) {
-    this(member, converter, SingleValueOptionParser::new);
+  BaseBeanMutator(T member, ValueConverter<Object> converter) {
+    this(member, converter, DelegatingOptionParser::new);
   }
 
   private void allowAccess() {
