@@ -42,6 +42,9 @@ class TargetClassResolver {
   }
 
   static TargetClass resolveTarget(Type genericType) {
+    if (genericType instanceof Class<?> clazz && clazz.isArray()) {
+      return new TargetClass(clazz, List.of(resolveTarget(clazz.getComponentType())));
+    }
     if (genericType instanceof ParameterizedType parameterizedType) {
       Type rawType = parameterizedType.getRawType();
       List<TargetClass> parametricTypes = new ArrayList<>();

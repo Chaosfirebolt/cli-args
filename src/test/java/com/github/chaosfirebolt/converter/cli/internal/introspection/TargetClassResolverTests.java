@@ -27,15 +27,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TargetClassResolverTests {
 
   @Test
-  public void shouldResolveCorrectly() throws NoSuchFieldException {
+  public void shouldResolveCorrectlyMap() throws NoSuchFieldException {
     Field field = TestClass.class.getDeclaredField("map");
-    TargetClass actual = TargetClassResolver.resolveTarget(field.getGenericType());
     TargetClass expected = new TargetClass(Map.class, List.of(new TargetClass(String.class, List.of()), new TargetClass(List.class, List.of(new TargetClass(Integer.class, List.of())))));
+    assertResolution(field, expected);
+  }
+
+  private static void assertResolution(Field field, TargetClass expected) {
+    TargetClass actual = TargetClassResolver.resolveTarget(field.getGenericType());
     assertEquals(expected, actual, "Incorrect target class resolution");
   }
 
   private static final class TestClass {
 
-    private final Map<String, List<Integer>> map = Map.of();
+    private final Map<String, List<Integer>> map = null;
+    private final int[] intArray = null;
+    private final Integer[] integerArray = null;
+    private final List<String[]> listOfArray = null;
+  }
+
+  @Test
+  public void shouldResolveCorrectlyPrimitiveArray() throws NoSuchFieldException {
+    Field field = TestClass.class.getDeclaredField("intArray");
+    TargetClass expected = new TargetClass(int[].class, List.of(new TargetClass(Integer.class, List.of())));
+    assertResolution(field, expected);
+  }
+
+  @Test
+  public void shouldResolveCorrectlyWrapperArray() throws NoSuchFieldException {
+    Field field = TestClass.class.getDeclaredField("integerArray");
+    TargetClass expected = new TargetClass(Integer[].class, List.of(new TargetClass(Integer.class, List.of())));
+    assertResolution(field, expected);
+  }
+
+  @Test
+  public void shouldResolveCorrectlyListOfArray() throws NoSuchFieldException {
+    Field field = TestClass.class.getDeclaredField("listOfArray");
+    TargetClass expected = new TargetClass(List.class, List.of(new TargetClass(String[].class, List.of(new TargetClass(String.class, List.of())))));
+    assertResolution(field, expected);
   }
 }
