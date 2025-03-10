@@ -33,13 +33,9 @@ final class ArrayMultiValueOptionParser extends BaseOptionParser {
     if (isEmpty(values)) {
       return createArray(0, componentType);
     }
-    Object[] array = createArray(values.size(), componentType);
-    for (int i = 0; i < values.size(); i++) {
-      String value = values.get(i);
-      Object parsedValue = converter.convert(componentType, value);
-      array[i] = parsedValue;
-    }
-    return array;
+    return values.stream()
+            .map(value -> converter.convert(componentType, value))
+            .toArray(v -> createArray(v, componentType));
   }
 
   private static Object[] createArray(int size, Class<?> componentType) {
