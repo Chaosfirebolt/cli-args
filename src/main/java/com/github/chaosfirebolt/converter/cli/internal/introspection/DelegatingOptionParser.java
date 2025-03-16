@@ -35,6 +35,7 @@ class DelegatingOptionParser extends BaseOptionParser {
   }
 
   private TargetType resolveTargetType() {
+    //TODO extract the enum in own file and make a method to test for match
     Class<?> mainClass = targetClass.mainType();
     if (Iterable.class.isAssignableFrom(mainClass)) {
       return TargetType.ITERABLE;
