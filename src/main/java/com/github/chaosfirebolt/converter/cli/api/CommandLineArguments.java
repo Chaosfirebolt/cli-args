@@ -44,7 +44,7 @@ public final class CommandLineArguments {
   }
 
   /**
-   * Parses the provided arguments to the target class .
+   * Parses the provided arguments to the target class.
    *
    * @param targetClass class to parse the arguments into
    * @param args        arguments to parse
